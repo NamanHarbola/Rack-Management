@@ -91,6 +91,39 @@ async def get_all_racks():
         logging.error(f"Error getting racks: {e}")
         raise HTTPException(status_code=500, detail="Failed to get racks")
 
+@api_router.get("/racks/search", response_model=RackSearchResponse)
+async def search_racks(q: str = Query(..., min_length=1)):
+    """Search racks by rack number, floor, or items"""
+    try:
+        search_regex = re.compile(re.escape(q), re.IGNORECASE)
+        
+        # Search in rack number, floor, and items
+        query = {
+            "$or": [
+                {"rackNumber": {"$regex": search_regex}},
+                {"floor": {"$regex": search_regex}},
+                {"items": {"$regex": search_regex}}
+            ]
+        }
+        
+        racks = await db.racks.find(query).to_list(1000)
+        rack_objects = [Rack(**rack) for rack in racks]
+        
+        # Find matched items for each rack
+        matched_items = {}
+        for rack in rack_objects:
+            matches = []
+            for item in rack.items:
+                if search_regex.search(item):
+                    matches.append(item)
+            if matches:
+                matched_items[rack.id] = matches
+        
+        return RackSearchResponse(racks=rack_objects, matchedItems=matched_items)
+    except Exception as e:
+        logging.error(f"Error searching racks: {e}")
+        raise HTTPException(status_code=500, detail="Failed to search racks")
+
 @api_router.get("/racks/{rack_id}", response_model=Rack)
 async def get_rack(rack_id: str):
     """Get a specific rack by ID"""
