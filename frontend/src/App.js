@@ -11,6 +11,7 @@ function App() {
   const [searchResults, setSearchResults] = useState({ racks: [], matchedItems: {} });
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingRack, setEditingRack] = useState(null);
+  const [viewingRack, setViewingRack] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
