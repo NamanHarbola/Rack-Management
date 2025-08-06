@@ -625,6 +625,7 @@ function App() {
       {/* Modals */}
       {showAddForm && <AddRackForm />}
       {editingRack && <EditRackForm rack={editingRack} />}
+      {viewingRack && <RackDetailModal rack={viewingRack} />}
     </div>
   );
 }
