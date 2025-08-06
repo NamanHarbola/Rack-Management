@@ -80,6 +80,13 @@ function App() {
     return racks;
   }, [searchQuery, searchResults, racks]);
 
+  // Function to highlight search terms in text
+  const highlightText = (text, query) => {
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+  };
+
   const AddRackForm = () => {
     const [formData, setFormData] = useState({
       rackNumber: "",
