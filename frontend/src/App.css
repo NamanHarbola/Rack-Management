@@ -1,145 +1,293 @@
+/* Enhanced Modern Inventory Management System Styles */
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Custom scrollbar for modern look */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+  border-radius: 6px;
 }
 
-.App-header {
-  background-color: #282c34;
-  padding: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #2563eb);
+  border-radius: 6px;
+  border: 2px solid #f1f5f9;
 }
 
-.App-link {
-  color: #61dafb;
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2563eb, #1d4ed8);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Custom styles for rack management */
-.rack-card-highlighted {
-  animation: pulse-highlight 2s ease-in-out;
-}
-
-@keyframes pulse-highlight {
-  0%, 100% {
-    box-shadow: 0 0 0 rgba(255, 235, 59, 0);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 235, 59, 0.6);
-  }
-}
-
-/* Search highlighting */
-mark {
-  background-color: #fef3c7;
-  color: #92400e;
-  padding: 0 2px;
-  border-radius: 2px;
-}
-
-/* Responsive design improvements */
-@media (max-width: 768px) {
-  .App {
-    padding: 0 10px;
-  }
-  
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-}
-
-/* Loading animation */
+/* Loading animations */
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .animate-spin {
   animation: spin 1s linear infinite;
 }
 
-/* Smooth transitions */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Focus styles for accessibility */
-input:focus, textarea:focus, button:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-/* Modal backdrop */
-.modal-backdrop {
-  backdrop-filter: blur(4px);
-}
-
-/* Card hover effects */
+/* Card hover effects with 3D transforms */
 .rack-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
 }
 
 .rack-card:hover {
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Search result highlighting with glow effect */
+.search-highlight {
+  animation: highlight-glow 1.5s ease-in-out;
+  box-shadow: 0 0 30px rgba(255, 235, 59, 0.5);
+}
+
+@keyframes highlight-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 235, 59, 0.8);
+  }
+}
+
+/* Enhanced search highlighting with better contrast */
+mark {
+  background: linear-gradient(120deg, #fef3c7 0%, #fcd34d 100%);
+  color: #92400e;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(252, 211, 77, 0.3);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button hover effects with gradient shifts */
+button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Search result highlighting animation */
-.search-highlight-enter {
-  animation: highlight-enter 0.3s ease-out;
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes highlight-enter {
+/* Modal backdrop with enhanced blur */
+.modal-backdrop {
+  backdrop-filter: blur(8px) brightness(0.8);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Focus styles for better accessibility */
+input:focus, textarea:focus, button:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Enhanced card design with glass morphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced floor section headers */
+.floor-header {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.floor-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.floor-header:hover::before {
+  left: 100%;
+}
+
+/* Item badges with improved styling */
+.item-badge {
+  background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+  border: 1px solid #81d4fa;
+  transition: all 0.2s ease;
+}
+
+.item-badge:hover {
+  background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(129, 212, 250, 0.3);
+}
+
+/* Matched item highlighting */
+.matched-item {
+  background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+  border: 2px solid #f59e0b;
+  animation: matched-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes matched-glow {
   from {
-    background-color: transparent;
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
   }
   to {
-    background-color: #fef3c7;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+  }
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(15px);
+    margin: 0 10px;
+  }
+  
+  .rack-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Enhanced empty state styling */
+.empty-state {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 2px dashed #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.empty-state:hover {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+/* Advanced search bar styling */
+.search-container {
+  position: relative;
+}
+
+.search-container::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.search-container:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* Hero section enhancements */
+.hero-bg {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Decorative elements */
+.decorative-dots {
+  background-image: radial-gradient(circle, #3b82f6 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+/* Form enhancements */
+.form-field {
+  position: relative;
+}
+
+.form-field::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.form-field:focus-within::before {
+  opacity: 1;
+}
+
+/* Status indicators */
+.status-indicator {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Dark mode support preparation */
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(17, 24, 39, 0.9);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    color: #f9fafb;
+  }
+  
+  mark {
+    background: linear-gradient(120deg, #451a03 0%, #92400e 100%);
+    color: #fef3c7;
   }
 }
