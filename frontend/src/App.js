@@ -351,8 +351,9 @@ function App() {
           </div>
         )}
         
-        <div className="mt-3 text-xs text-gray-500">
-          Created: {new Date(rack.createdAt).toLocaleDateString()}
+        <div className="mt-3 text-xs text-gray-500 flex justify-between items-center">
+          <span>Created: {new Date(rack.createdAt).toLocaleDateString()}</span>
+          <span className="text-blue-500 font-medium">Click to view details →</span>
         </div>
       </div>
     );
