@@ -580,8 +580,12 @@ function App() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl mr-6">
-                <span className="text-5xl">🏪</span>
+              <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl mr-6 border border-white/20">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_rack-finder/artifacts/3ikza5tu_WhatsApp%20Image%202025-06-15%20at%203.50.55%20PM.jpeg" 
+                  alt="MADAN STORE Logo"
+                  className="w-16 h-16 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-5xl font-bold mb-2">MADAN STORE</h1>
