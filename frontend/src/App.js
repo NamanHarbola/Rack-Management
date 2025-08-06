@@ -278,9 +278,11 @@ function App() {
     const matchedItems = searchResults.matchedItems[rack.id] || [];
 
     return (
-      <div className={`bg-white rounded-lg shadow-md p-4 border-2 transition-all duration-200 ${
+      <div className={`bg-white rounded-lg shadow-md p-4 border-2 transition-all duration-200 cursor-pointer ${
         isHighlighted ? 'border-yellow-400 bg-yellow-50' : 'border-gray-200 hover:border-blue-300'
-      }`}>
+      }`}
+      onClick={() => setViewingRack(rack)}
+      >
         <div className="flex justify-between items-start mb-3">
           <div>
             <h4 className="text-lg font-semibold text-gray-800">
@@ -300,14 +302,20 @@ function App() {
           </div>
           <div className="flex space-x-2">
             <button
-              onClick={() => setEditingRack(rack)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditingRack(rack);
+              }}
               className="text-blue-600 hover:text-blue-800 p-1"
               title="Edit Rack"
             >
               ✏️
             </button>
             <button
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
               className="text-red-600 hover:text-red-800 p-1"
               title="Delete Rack"
             >
