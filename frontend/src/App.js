@@ -350,6 +350,156 @@ function App() {
     );
   };
 
+  const RackDetailModal = ({ rack }) => {
+    const matchedItems = searchResults.matchedItems[rack.id] || [];
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-90vh overflow-y-auto mx-4">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                {searchQuery ? (
+                  <span dangerouslySetInnerHTML={{
+                    __html: highlightText(rack.rackNumber, searchQuery)
+                  }} />
+                ) : rack.rackNumber}
+              </h2>
+              <p className="text-lg text-gray-600">
+                Floor: {searchQuery ? (
+                  <span dangerouslySetInnerHTML={{
+                    __html: highlightText(rack.floor, searchQuery)
+                  }} />
+                ) : rack.floor}
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                Created: {new Date(rack.createdAt).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+              {rack.updatedAt !== rack.createdAt && (
+                <p className="text-sm text-gray-500">
+                  Last updated: {new Date(rack.updatedAt).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              )}
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => {
+                  setViewingRack(null);
+                  setEditingRack(rack);
+                }}
+                className="text-blue-600 hover:text-blue-800 p-2 rounded-md hover:bg-blue-50"
+                title="Edit Rack"
+              >
+                ✏️ Edit
+              </button>
+              <button
+                onClick={() => setViewingRack(null)}
+                className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Items in this Rack ({rack.items.length})
+            </h3>
+            {rack.items && rack.items.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {rack.items.map((item, index) => {
+                  const isMatched = matchedItems.includes(item);
+                  return (
+                    <div
+                      key={index}
+                      className={`p-3 rounded-lg border ${
+                        isMatched 
+                          ? 'bg-yellow-100 border-yellow-300 shadow-sm' 
+                          : 'bg-gray-50 border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`font-medium ${isMatched ? 'text-yellow-900' : 'text-gray-800'}`}>
+                          {searchQuery && isMatched ? (
+                            <span dangerouslySetInnerHTML={{
+                              __html: highlightText(item, searchQuery)
+                            }} />
+                          ) : item}
+                        </span>
+                        <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full">
+                          #{index + 1}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <div className="text-4xl mb-2">📦</div>
+                <p>No items in this rack yet</p>
+              </div>
+            )}
+          </div>
+          
+          {searchQuery && matchedItems.length > 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <h4 className="font-semibold text-yellow-800 mb-2">🔍 Search Matches</h4>
+              <p className="text-sm text-yellow-700">
+                Found <strong>{matchedItems.length}</strong> item(s) matching "<strong>{searchQuery}</strong>":
+              </p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {matchedItems.map((item, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-yellow-200 text-yellow-800 text-xs rounded-full font-medium"
+                    dangerouslySetInnerHTML={{
+                      __html: highlightText(item, searchQuery)
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+            <div className="text-sm text-gray-500">
+              <span className="font-medium">Rack ID:</span> {rack.id}
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setViewingRack(null);
+                  setEditingRack(rack);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+              >
+                Edit Rack
+              </button>
+              <button
+                onClick={() => setViewingRack(null)}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
