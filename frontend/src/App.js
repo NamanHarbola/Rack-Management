@@ -274,12 +274,6 @@ function App() {
       }
     };
 
-    const highlightText = (text, query) => {
-      if (!query || !text) return text;
-      const regex = new RegExp(`(${query})`, 'gi');
-      return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
-    };
-
     const matchedItems = searchResults.matchedItems[rack.id] || [];
 
     return (
