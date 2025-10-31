@@ -73,19 +73,38 @@ async def create_rack(rack_data: RackCreate):
         raise HTTPException(status_code=500, detail="Failed to create rack")
 
 @api_router.get("/racks", response_model=Dict[str, List[Rack]])
-async def get_all_racks():
-    """Get all racks grouped by floor"""
+async def get_all_racks(
+    page: int = Query(1, ge=1),
+    limit: int = Query(5, ge=1, le=20) # Load 5 floors at a time
+):
+    """Get racks grouped by floor, with pagination by floor."""
     try:
-        racks = await db.racks.find().sort("floor", 1).to_list(1000)
-        rack_objects = [Rack(**rack) for rack in racks]
+        skip = (page - 1) * limit
         
-        # Group by floor
-        floors = {}
-        for rack in rack_objects:
-            if rack.floor not in floors:
-                floors[rack.floor] = []
-            floors[rack.floor].append(rack)
-            
+        # 1. Get *all* distinct floors and sort them
+        all_floors = await db.racks.distinct("floor")
+        all_floors.sort()
+        
+        # 2. Paginate the list of floors
+        paginated_floors = all_floors[skip : skip + limit]
+        
+        if not paginated_floors:
+            return {} # No more floors
+
+        # 3. Find all racks for *only those floors*
+        query = {"floor": {"$in": paginated_floors}}
+        # Note: Increased to_list limit, as we are already filtered by floor
+        racks_cursor = db.racks.find(query).sort("floor", 1)
+        racks = await racks_cursor.to_list(10000) 
+        
+        # 4. Group them
+        floors = {floor: [] for floor in paginated_floors}
+        for rack in racks:
+            rack_obj = Rack(**rack)
+            # This check is needed in case a floor was in paginated_floors but had 0 racks
+            if rack_obj.floor in floors:
+                floors[rack_obj.floor].append(rack_obj)
+                
         return floors
     except Exception as e:
         logging.error(f"Error getting racks: {e}")
@@ -95,21 +114,15 @@ async def get_all_racks():
 async def search_racks(q: str = Query(..., min_length=1)):
     """Search racks by rack number, floor, or items"""
     try:
-        search_regex = re.compile(re.escape(q), re.IGNORECASE)
-        
-        # Search in rack number, floor, and items
-        query = {
-            "$or": [
-                {"rackNumber": {"$regex": search_regex}},
-                {"floor": {"$regex": search_regex}},
-                {"items": {"$regex": search_regex}}
-            ]
-        }
+        # Use $text index for fast search
+        query = { "$text": { "$search": q } }
         
         racks = await db.racks.find(query).to_list(1000)
         rack_objects = [Rack(**rack) for rack in racks]
         
-        # Find matched items for each rack
+        # Find matched items for highlighting
+        # We still need regex here just to find *which* item matched
+        search_regex = re.compile(re.escape(q), re.IGNORECASE)
         matched_items = {}
         for rack in rack_objects:
             matches = []
