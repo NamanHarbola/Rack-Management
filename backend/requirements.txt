@@ -5,4 +5,3 @@ pymongo==4.5.0
 pydantic>=2.6.4
 motor==3.3.1
 python-multipart>=0.0.9
-# Removed: pandas, numpy, boto3, jq (if not used for other scripts)
