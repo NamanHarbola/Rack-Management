@@ -124,7 +124,7 @@ const RackDetailModal = ({
               Found <strong className="text-yellow-800">{matchedItems.length}</strong> item(s) matching "<strong className="text-yellow-800">{searchQuery}</strong>":
             </p>
             <div className="flex flex-wrap gap-3">
-              {matchedItems..map((item, index) => (
+              {matchedItems.map((item, index) => (
                 <span
                   key={index}
                   className="px-4 py-2 bg-yellow-200 text-yellow-800 rounded-full font-semibold border border-yellow-300"

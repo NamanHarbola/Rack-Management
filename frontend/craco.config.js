@@ -1,10 +1,4 @@
-// Load configuration from environment or config file
 const path = require('path');
-
-// Environment variable overrides
-const config = {
-  disableHotReload: process.env.DISABLE_HOT_RELOAD === 'true',
-};
 
 module.exports = {
   webpack: {
@@ -12,35 +6,22 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
     },
     configure: (webpackConfig) => {
-      
-      // Disable hot reload completely if environment variable is set
-      if (config.disableHotReload) {
-        // Remove hot reload related plugins
-        webpackConfig.plugins = webpackConfig.plugins.filter(plugin => {
-          return !(plugin.constructor.name === 'HotModuleReplacementPlugin');
-        });
-        
-        // Disable watch mode
-        webpackConfig.watch = false;
-        webpackConfig.watchOptions = {
-          ignored: /.*/, // Ignore all files
-        };
-      } else {
-        // Add ignored patterns to reduce watched directories
-        webpackConfig.watchOptions = {
-          ...webpackConfig.watchOptions,
-          ignored: [
-            '**/node_modules/**',
-            '**/.git/**',
-            '**/build/**',
-            '**/dist/**',
-            '**/coverage/**',
-            '**/public/**',
-          ],
-        };
-      }
-      
+      // Optimization: Ignore heavy folders to reduce lag during development
+      webpackConfig.watchOptions = {
+        ignored: /node_modules|build|dist|.git/,
+      };
       return webpackConfig;
     },
+  },
+  // This block fixes the WebSocket connection to port 443 errors
+  devServer: (devServerConfig) => {
+    devServerConfig.client = {
+      webSocketURL: {
+        hostname: 'localhost',
+        pathname: '/ws',
+        port: 3000,
+      },
+    };
+    return devServerConfig;
   },
 };
